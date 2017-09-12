@@ -1,0 +1,4 @@
+rootProject.name = 'AskeyCloudJavaSDK'
+include 'sdkcore'
+include 'authsdk'
+include 'iotdevicesdk'

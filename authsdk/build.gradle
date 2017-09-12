@@ -1,0 +1,68 @@
+group 'com.askeycloud'
+version '1.1.0.20170824'
+
+def bintrayUserOrg = 'askeycloudsdk'
+def bintrayRepo = 'sdk'
+def packageName = 'askeycloudauthjavasdk'
+def libDesc = 'AskeyCloud auth SDK java version.'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile project(':sdkcore')
+}
+
+//test{
+//    reports {
+//        junitXml.enabled = false
+//        html.enabled = true
+//    }
+//}
+
+jar {
+    from sourceSets.main.output
+    from sourceSets.main.allJava
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            if (plugins.hasPlugin('war')) {
+                from components.web
+            } else {
+                from components.java
+            }
+
+        }
+    }
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+    publications = ['mavenJava']
+
+    dryRun = false
+    publish = true
+
+    pkg {
+        userOrg = bintrayUserOrg
+        repo = bintrayRepo
+        name = packageName
+        desc = libDesc
+
+        version {
+            name = '1.1.0'
+        }
+    }
+}
